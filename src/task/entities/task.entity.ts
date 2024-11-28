@@ -1,3 +1,5 @@
+import { isEmpty } from "lodash";
+
 export enum TaskStatus {
     PENDING = 'PENDING',
     IN_PROGRESS = 'IN_PROGRESS',
@@ -16,8 +18,8 @@ export class Task {
         this.id = taskDto.id;
         this.title = taskDto.title;
         this.description = taskDto.description;
-        this.status = TaskStatus.IN_PROGRESS;
-        this.discount = 100;
+        this.status = isEmpty(taskDto.status) ?  TaskStatus.PENDING : taskDto.status;
+        this.discount = 50;
     }
 
     getDiscount(): number {
