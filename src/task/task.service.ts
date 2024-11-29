@@ -10,7 +10,7 @@ export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
   private tasklist: Task[] = [
     {
-      id: uuidv4(),
+      id: '800e1205-e278-49ef-9f3a-3ef143d697bd',
       title: 'Create a Budget',
       description: 'Build a new room',
       status: TaskStatus.PENDING,
@@ -39,11 +39,9 @@ export class TaskService {
   async update(id: string, task: taskDto): Promise<Task> {
     const taskToUpdate = this.tasklist.findIndex((t) => t.id === id);
     if (taskToUpdate === -1) throw new NotFoundException('Task not found');
-
-    this.tasklist = this.tasklist.map((t) =>
-      t.id === task.id ? ({ ...t, ...task } as Task) : t,
-    );
-
+    this.tasklist = this.tasklist.map((t) => {
+      return t.id === id ? ({ ...t, ...task } as Task) : t;
+    });
     const updatedTask = this.tasklist.find((t) => t.id === id);
 
     return updatedTask;
