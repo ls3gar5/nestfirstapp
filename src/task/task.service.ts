@@ -11,7 +11,7 @@ export class TaskService {
   private tasklist: Task[] = [
     {
       id: '800e1205-e278-49ef-9f3a-3ef143d697bd',
-      title: 'Create a Budget',
+      title: 'Create a Budget 1',
       description: 'Build a new room',
       status: TaskStatus.PENDING,
     } as Task,
