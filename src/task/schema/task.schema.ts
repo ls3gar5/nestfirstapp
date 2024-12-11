@@ -1,15 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { TaskStatus } from '../entities/task.entity';
 
-export type TaskDocument = HydratedDocument<Task>;
+export type TaskDocument = HydratedDocument<Tasks>;
 
 @Schema()
-export class Task {
-  @Prop()
-  name: string;
+export class Tasks {
+  id: string;
+  @Prop({ type: MongooseSchema.Types.String, alias: 'id' })
+  _id: string;
 
   @Prop()
-  description: number;
+  title: string;
+
+  @Prop()
+  description: string;
+
+  @Prop()
+  status: TaskStatus;
 }
 
-export const TaskDoneSchema = SchemaFactory.createForClass(Task);
+export const TaskSchema = SchemaFactory.createForClass(Tasks);

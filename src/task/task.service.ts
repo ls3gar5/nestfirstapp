@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './entities/task.entity';
-import { taskDto } from './entities/task.dto';
+import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import { TaskRepository } from './task.repository';
@@ -21,28 +21,32 @@ export class TaskService {
     return this.taskRepository.getMessage();
   }
   async getAll(): Promise<Task[]> {
-    return this.tasklist;
+    return this.taskRepository.getAll();
   }
 
-  async create(task: taskDto): Promise<Task> {
-    const newTaskdto = {
+  async create(taskDto: TaskDto): Promise<Task> {
+    const newTask = {
       id: uuidv4(),
-      title: task.title,
-      description: task.description,
-      status: task.status,
+      title: taskDto.title,
+      description: taskDto.description,
+      status: taskDto.status,
     };
-    const newTask = new Task(newTaskdto);
-    this.tasklist.push(newTask);
-    return newTask;
+    const task = new Task(newTask);
+    this.tasklist.push(task);
+
+    await this.taskRepository.createTask(task);
+    return task;
   }
 
-  async update(id: string, task: taskDto): Promise<Task> {
+  async update(id: string, task: TaskDto): Promise<Task> {
     const taskToUpdate = this.tasklist.findIndex((t) => t.id === id);
     if (taskToUpdate === -1) throw new NotFoundException('Task not found');
-    this.tasklist = this.tasklist.map((t) => {
-      return t.id === id ? ({ ...t, ...task } as Task) : t;
-    });
-    const updatedTask = this.tasklist.find((t) => t.id === id);
+
+    // this.tasklist = this.tasklist.map((t) => {
+    //   return t.id === id ? ({ ...t, ...task } as Task) : t;
+    // });
+    // const updatedTask = this.tasklist.find((t) => t.id === id);
+    const updatedTask = await this.taskRepository.updateTask(id, task);
 
     return updatedTask;
   }
