@@ -6,6 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { isEmpty } from 'lodash';
+import { TaskDto } from './task.dto';
 
 export enum TaskStatus {
   PENDING = 'PENDING',
@@ -26,7 +27,7 @@ export class Task {
   status: TaskStatus;
   private discount: number;
 
-  constructor(taskDto: Partial<Task>) {
+  constructor(taskDto: Partial<TaskDto>) {
     this.id = taskDto.id;
     this.title = taskDto.title;
     this.description = taskDto.description;

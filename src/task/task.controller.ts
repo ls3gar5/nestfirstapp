@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { taskDto } from './entities/task.dto';
+import { TaskDto } from './entities/task.dto';
 import { Task } from './entities/task.entity';
 
 @Controller('task')
@@ -29,7 +29,7 @@ export class TaskController {
 
   @Post()
   @HttpCode(201)
-  async create(@Body() newtask: taskDto): Promise<Task> {
+  async create(@Body() newtask: TaskDto): Promise<Task> {
     return await this.taskservice.create(newtask);
   }
 
@@ -37,7 +37,7 @@ export class TaskController {
   @HttpCode(202)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateTask: taskDto,
+    @Body() updateTask: TaskDto,
   ): Promise<Task> {
     return await this.taskservice.update(id, updateTask);
   }
