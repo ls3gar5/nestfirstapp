@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskDto } from './entities/task.dto';

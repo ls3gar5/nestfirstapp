@@ -9,9 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       isGlobal: true, // Makes ConfigModule available everywhere
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(
-      'mongodb://root:admin@localhost:27017/?authMechanism=DEFAULT&authSource=admin',
-    ),
+    MongooseModule.forRoot(process.env.MONGOURL),
     TaskModule,
   ],
   controllers: [],
