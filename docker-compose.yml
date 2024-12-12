@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  
   web:
     build: 
       context: .
@@ -9,7 +10,7 @@ services:
     ports:
       - "3010:3010"
     volumes:
-      - ./:/app
+      - ./:/app:delegated
       - /app/node_modules
     environment:
       - NODE_ENV=development
