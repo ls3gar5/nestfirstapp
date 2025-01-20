@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { isEmpty } from 'lodash';
 import { TaskDto } from './task.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export enum TaskStatus {
   PENDING = 'PENDING',
@@ -15,14 +16,21 @@ export enum TaskStatus {
 }
 
 export class Task {
+  @ApiProperty()
   id: string;
+
+  @ApiProperty({ example: 'Task title' })
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
   title: string;
+
+  @ApiProperty()
   @IsString()
   @IsOptional()
   description: string;
+
+  @ApiProperty()
   @IsIn([TaskStatus.DONE, TaskStatus.IN_PROGRESS, TaskStatus.PENDING])
   status: TaskStatus;
   private discount: number;

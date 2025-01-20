@@ -4,7 +4,7 @@ import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import { TaskRepository } from './task.repository';
-
+import { StsService } from './STSService';
 @Injectable()
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) {}
@@ -22,6 +22,17 @@ export class TaskService {
   }
   async getAll(): Promise<Task[]> {
     return this.taskRepository.getAll();
+  }
+
+  async processAll(): Promise<void> {
+    const list = await this.taskRepository.getAll();
+
+    await Promise.all(
+      list.map(async (task: Task) => {
+        const nro = await StsService.assumeRole();
+        console.log(`task: ${task.id}, date.now: ${Date.now()},  role: ${nro}`);
+      }),
+    );
   }
 
   async create(taskDto: TaskDto): Promise<Task> {
