@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Promise } from 'mongoose';
+import { Order, OrderStatus, Pizza } from './pizza.types';
 
 @Injectable()
 export class PizzaService {
-  private menu = [
+  private menu: Pizza[] = [
     { name: 'Margherita', price: 8 },
     { name: 'Pepperoni', price: 10 },
     { name: 'Hawaiian', price: 10 },
@@ -12,21 +13,33 @@ export class PizzaService {
 
   private cashInRegister = 100;
   private nextOrderId = 1;
-  private orderQueue = [];
+  private orderQueue: Order[] = [];
 
-  private async addNewPizza(pizzaObj): Promise<void> {
+  constructor() {
+    this.initializeMenu();
+  }
+
+  private async initializeMenu() {
+    await Promise.all([
+      this.addNewPizza({ name: 'Chicken Bacon Ranch', price: 12 }),
+      this.addNewPizza({ name: 'BBQ Chicken', price: 12 }),
+      this.addNewPizza({ name: 'Spicy Sausage', price: 11 }),
+    ]);
+  }
+
+  private async addNewPizza(pizzaObj: Pizza): Promise<void> {
     this.menu.push(pizzaObj);
   }
 
-  private async placeOrder(pizzaName) {
+  private async placeOrder(pizzaName: string) {
     const selectedPizza = this.menu.find(
       (pizzaObj) => pizzaObj.name === pizzaName,
     );
     this.cashInRegister += selectedPizza.price;
-    const newOrder = {
+    const newOrder: Order = {
       id: this.nextOrderId++,
       pizza: selectedPizza,
-      status: 'ordered',
+      status: OrderStatus.ORDERED,
     };
     this.orderQueue.push(newOrder);
     return newOrder;
@@ -34,22 +47,22 @@ export class PizzaService {
 
   private async completeOrder(orderId) {
     const order = this.orderQueue.find((order) => order.id === orderId);
-    order.status = 'completed';
+    order.status = OrderStatus.COMPLETED;
     return order;
   }
 
-  async getOrdersPizza() {
-    await Promise.all([
-      this.addNewPizza({ name: 'Chicken Bacon Ranch', price: 12 }),
-      this.addNewPizza({ name: 'BBQ Chicken', price: 12 }),
-      this.addNewPizza({ name: 'Spicy Sausage', price: 11 }),
-    ]);
-
-    await this.placeOrder('Chicken Bacon Ranch');
-    await this.completeOrder(1);
-
+  async getOrdersPizza(pizzaName: string): Promise<boolean> {
+    try {
+      await this.placeOrder(pizzaName);
+      await this.completeOrder(1);
+    } catch (error) {
+      console.log('Error:', error);
+      return false;
+    }
     console.log('Menu:', this.menu);
     console.log('Cash in register:', this.cashInRegister);
     console.log('Order queue:', this.orderQueue);
+
+    return true;
   }
 }

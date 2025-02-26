@@ -1,12 +1,5 @@
-import { PartialType } from '@nestjs/swagger';
-import { Task, TaskStatus } from './task.entity';
-import {
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Length,
-} from 'class-validator';
+import { TaskStatus } from './task.entity';
+import { IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class TaskDto {
   id: string;
