@@ -1,9 +1,6 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
 ## Last Update
 
+- 20250227- Update Docker Update node 20 and fix mongo connection into docker
 - [20250123 - Basic NestJS](https://www.youtube.com/watch?v=2gtiffE3__U&ab_channel=TechVision)
 - [20250121 - Test Concepts](https://www.youtube.com/watch?v=9JPbnYUeKuM&t=16s&ab_channel=TechVision)
 - [20250120 - Create documentation by OpenAI and Swagger](https://www.youtube.com/watch?v=DG0uZ0E8DBs&ab_channel=TechVision)
@@ -25,10 +22,8 @@ $ npm install
 ```bash
 # development
 $ npm run start
-
 # watch mode
 $ npm run start:dev
-
 # production mode
 $ npm run start:prod
 ```
@@ -38,24 +33,8 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
-
 # e2e tests
 $ npm run test:e2e
-
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
