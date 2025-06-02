@@ -1,0 +1,13 @@
+### get its working
+GET http://localhost:3010/task
+### add a new task
+GET http://localhost:3010/task/title/Dragon
+### add a new task
+POST http://localhost:3010/task
+Content-Type: application/json
+
+{
+  "title": "test",
+  "description": "This is a test task",
+  "status": "PENDING"
+}

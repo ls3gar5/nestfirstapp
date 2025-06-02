@@ -17,6 +17,26 @@ export class TaskRepository {
       throw new InternalServerErrorException(error.message);
     }
   }
+  async getByTitle(title: string): Promise<Task> {
+    try {
+      const task = await this.taskModule.findOne<Task>({ title });
+      return task;  
+    } catch (error) {   
+      throw new InternalServerErrorException(error.message);
+    }
+  }
+  async delete(id: string): Promise<Task> {
+    try {   
+      const result = await this.taskModule.findByIdAndDelete(id);
+      if (!result) {
+        throw new InternalServerErrorException('Task not found');
+      }
+      return new Task(result);
+    }
+    catch (error) { 
+      throw new InternalServerErrorException(error.message);
+    }
+  }
   async createTask(newTask: Task): Promise<Task> {
     try {
       const result = await this.taskModule.create(newTask);

@@ -28,6 +28,12 @@ export class TaskController {
     return await this.taskservice.getAll();
   }
 
+  @Get('title/:title')
+  async getByTitle(@Param('title') title: string): Promise<Task> {
+    return await this.taskservice.getByTitle(title);
+  }
+
+
   @Post()
   @HttpCode(201)
   async create(@Body() newtask: TaskDto): Promise<Task> {
