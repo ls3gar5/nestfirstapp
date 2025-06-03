@@ -7,7 +7,7 @@ import { TaskRepository } from './task.repository';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(private readonly taskRepository: TaskRepository) { }
   private tasklist: Task[] = [
     {
       id: '800e1205-e278-49ef-9f3a-3ef143d697bd',
@@ -21,7 +21,9 @@ export class TaskService {
     return this.taskRepository.getMessage();
   }
 
-  async getByTitle(title: string): Promise<Task> { 
+  async getByTitle(title: string): Promise<Task> {
+    // const dataFile = await this.taskRepository.readFile();
+    // if (isEmpty(dataFile)) throw new NotFoundException('File not found');
     const task = await this.taskRepository.getByTitle(title);
     if (isEmpty(task)) throw new NotFoundException('Task not found');
     return task;
