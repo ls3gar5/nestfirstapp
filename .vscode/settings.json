@@ -13,5 +13,13 @@
   },
   "prettier.singleQuote": true,
   "eslint.alwaysShowStatus": true,
-  "cSpell.words": ["newtask", "Taskdto", "taskservice", "uuidv"]
+  "cSpell.words": [
+    "newtask",
+    "Taskdto",
+    "taskservice",
+    "uuidv"
+  ],
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

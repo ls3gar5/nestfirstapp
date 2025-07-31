@@ -14,7 +14,7 @@ import { TaskService } from './task.service';
 import { TaskDto } from './entities/task.dto';
 import { Task } from './entities/task.entity';
 
-@Controller('task')
+@Controller({ path: 'task', version: '1' })
 export class TaskController {
   constructor(private readonly taskservice: TaskService) {}
 
@@ -27,6 +27,12 @@ export class TaskController {
   async allTasks(): Promise<Task[]> {
     return await this.taskservice.getAll();
   }
+
+  @Get('title/:title')
+  async getByTitle(@Param('title') title: string): Promise<Task> {
+    return await this.taskservice.getByTitle(title);
+  }
+
 
   @Post()
   @HttpCode(201)
