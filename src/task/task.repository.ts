@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadGatewayException, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { TaskDocument, Tasks } from './schema/task.schema';
 import { Task } from './entities/task.entity';
@@ -36,14 +36,15 @@ export class TaskRepository {
 
       return task;
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new BadGatewayException('Error fetching task by title');
+      // throw new InternalServerErrorException(error.message);
     }
   }
   async delete(id: string): Promise<Task> {
     try {
       const result = await this.taskModule.findByIdAndDelete(id);
       if (!result) {
-        throw new InternalServerErrorException('Task not found');
+        throw new NotFoundException('Task not found');
       }
       return new Task(result);
     }

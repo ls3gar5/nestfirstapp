@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,6 +8,8 @@ import { TaskRepository } from './task.repository';
 @Injectable()
 export class TaskService {
   constructor(private readonly taskRepository: TaskRepository) { }
+  private readonly logger = new Logger(TaskService.name);
+
   private tasklist: Task[] = [
     {
       id: '800e1205-e278-49ef-9f3a-3ef143d697bd',
@@ -18,7 +20,11 @@ export class TaskService {
   ];
 
   async getMessage(): Promise<string> {
-    return this.taskRepository.getMessage();
+    this.logger.log('Getting message from TaskService');
+    this.logger.warn('This is a warning message');
+    this.logger.error('This is an error message');
+    throw new InternalServerErrorException('This is a test message');
+    // return this.taskRepository.getMessage();
   }
 
   async getByTitle(title: string): Promise<Task> {

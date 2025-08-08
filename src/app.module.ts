@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TaskModule } from './task/task.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CacheModule } from '@nestjs/cache-manager';
+import { APP_FILTER } from '@nestjs/core';
+import { CustomExceptionFilter, CustomNotFoundException } from './handler/error.handler';
 
 @Module({
   imports: [
@@ -20,7 +22,13 @@ import { CacheModule } from '@nestjs/cache-manager';
     MongooseModule.forRoot(process.env.MONGOURL),
     TaskModule,
   ],
-  controllers: [],
-  providers: [],
+  providers: [{
+    provide: APP_FILTER,
+    useClass: CustomExceptionFilter,
+  }, {
+    provide: APP_FILTER,
+    useClass: CustomNotFoundException,
+  },
+    Logger],
 })
 export class AppModule { }

@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { CustomExceptionFilter } from './handler/error.handler';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,6 +10,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+
   app.enableCors();
 
   const config = new DocumentBuilder()
@@ -19,9 +21,9 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  // app.get(ConfigService);
-  console.log('Port: ', process.env.PORT);
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new CustomExceptionFilter());
+  console.log('Port: ', process.env.PORT);
   await app.listen(process.env.PORT ?? 3010);
 }
 bootstrap();
