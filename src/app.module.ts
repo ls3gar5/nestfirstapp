@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TaskModule } from './task/task.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -28,7 +28,6 @@ import { CustomExceptionFilter, CustomNotFoundException } from './handler/error.
   }, {
     provide: APP_FILTER,
     useClass: CustomNotFoundException,
-  },
-    Logger],
+  },],
 })
 export class AppModule { }

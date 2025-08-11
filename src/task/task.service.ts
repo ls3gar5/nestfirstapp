@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, Logger, LoggerService, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,8 +7,12 @@ import { TaskRepository } from './task.repository';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly taskRepository: TaskRepository) { }
-  private readonly logger = new Logger(TaskService.name);
+  constructor(@Inject(Logger) private readonly logger: LoggerService,
+    private readonly taskRepository: TaskRepository,
+  ) { }
+  // this way is when the logger is not a provider.
+  // private readonly logger = new Logger(TaskService.name);
+
 
   private tasklist: Task[] = [
     {

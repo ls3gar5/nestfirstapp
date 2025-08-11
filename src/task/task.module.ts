@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TaskController } from './task.controller';
 import { TaskService } from './task.service';
 import { TaskRepository } from './task.repository';
@@ -17,6 +17,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     MongooseModule.forFeature([{ name: Tasks.name, schema: TaskSchema }]),
   ],
   controllers: [TaskController, TaskV2Controller],
-  providers: [TaskService, TaskRepository],
+  providers: [TaskService, TaskRepository, Logger],
 })
 export class TaskModule { }
