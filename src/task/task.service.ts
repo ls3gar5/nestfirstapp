@@ -27,8 +27,8 @@ export class TaskService {
     this.logger.log('Getting message from TaskService');
     this.logger.warn('This is a warning message');
     this.logger.error('This is an error message');
-    throw new InternalServerErrorException('This is a test message');
-    // return this.taskRepository.getMessage();
+    // throw new InternalServerErrorException('This is a test message');
+    return this.taskRepository.getMessage();
   }
 
   async getByTitle(title: string): Promise<Task> {

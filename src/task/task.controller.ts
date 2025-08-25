@@ -16,6 +16,7 @@ import { TaskDto } from './entities/task.dto';
 import { Task } from './entities/task.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomNotFoundException } from '../handler/error.handler';
+import { formattedMessage } from './task.util';
 
 @Controller({ path: 'task', version: '1' })
 export class TaskController {
@@ -23,6 +24,7 @@ export class TaskController {
 
   @Get()
   async message(): Promise<string> {
+    formattedMessage('test');
     return await this.taskservice.getMessage();
   }
 
