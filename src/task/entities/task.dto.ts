@@ -18,5 +18,6 @@ export class TaskDto {
   description: string;
   @IsIn([TaskStatus.DONE, TaskStatus.IN_PROGRESS, TaskStatus.PENDING])
   status: TaskStatus;
-  private discount: number;
+  @IsOptional()
+  discount: number;
 }
