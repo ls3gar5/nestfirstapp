@@ -7,12 +7,12 @@ import { TaskRepository } from './task.repository';
 
 @Injectable()
 export class TaskService {
-  constructor(@Inject(Logger) private readonly logger: LoggerService,
+  constructor(
     private readonly taskRepository: TaskRepository,
   ) { }
   // this way is when the logger is not a provider.
   // private readonly logger = new Logger(TaskService.name);
-
+  @Inject(Logger) private readonly logger: LoggerService;
 
   private tasklist: Task[] = [
     {
