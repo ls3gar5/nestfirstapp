@@ -7,7 +7,7 @@ import { ApiQuery } from '@nestjs/swagger';
 
 @Controller({ path: 'task', version: '2' })
 export class TaskV2Controller {
-  constructor(private readonly taskservice: TaskService) {}
+  constructor(private readonly taskservice: TaskService) { }
 
   @ApiQuery({
     name: 'version',
@@ -16,6 +16,7 @@ export class TaskV2Controller {
     example: '2',
   })
   @Get()
+
   async message(): Promise<string> {
     return await this.taskservice.getMessage();
   }

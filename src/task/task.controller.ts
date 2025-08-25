@@ -8,18 +8,23 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseFilters,
   ValidationPipe,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskDto } from './entities/task.dto';
 import { Task } from './entities/task.entity';
+import { ApiTags } from '@nestjs/swagger';
+import { CustomNotFoundException } from '../handler/error.handler';
+import { formattedMessage } from './task.util';
 
 @Controller({ path: 'task', version: '1' })
 export class TaskController {
-  constructor(private readonly taskservice: TaskService) {}
+  constructor(private readonly taskservice: TaskService) { }
 
   @Get()
   async message(): Promise<string> {
+    formattedMessage('test');
     return await this.taskservice.getMessage();
   }
 
@@ -29,6 +34,9 @@ export class TaskController {
   }
 
   @Get('title/:title')
+  @ApiTags('Get task tittle!!')
+  @HttpCode(210)
+  @UseFilters(CustomNotFoundException)
   async getByTitle(@Param('title') title: string): Promise<Task> {
     return await this.taskservice.getByTitle(title);
   }

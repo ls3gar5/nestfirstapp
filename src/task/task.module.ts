@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TaskController } from './task.controller';
 import { TaskService } from './task.service';
 import { TaskRepository } from './task.repository';
@@ -9,6 +9,11 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    CacheModule.register({
+      isGlobal: true, // Makes CacheModule available everywhere
+      ttl: 600, // seconds
+      max: 1000, // maximum number of items in cache
+    }),
     CacheModule.register({
       isGlobal: true, // Makes CacheModule available everywhere
       ttl: 600, // seconds
