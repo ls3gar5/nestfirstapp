@@ -32,7 +32,6 @@ export class Task {
     this.title = taskDto.title;
     this.description = taskDto.description;
     this.status = isEmpty(taskDto.status) ? TaskStatus.PENDING : taskDto.status;
-    this.discount = 50;
   }
 
   getDiscount(): number {
