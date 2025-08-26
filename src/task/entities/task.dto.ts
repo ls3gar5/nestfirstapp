@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 
 export class TaskDto {
-  id: string;
+  id?: string;
   @IsString()
   @IsNotEmpty()
   title: string;

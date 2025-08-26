@@ -12,7 +12,8 @@ export class TaskService {
   ) { }
   // this way is when the logger is not a provider.
   // private readonly logger = new Logger(TaskService.name);
-  @Inject(Logger) private readonly logger: LoggerService;
+
+  // @Inject(Logger) private readonly logger: LoggerService;
 
   private tasklist: Task[] = [
     {
@@ -24,9 +25,9 @@ export class TaskService {
   ];
 
   async getMessage(): Promise<string> {
-    this.logger.log('Getting message from TaskService');
-    this.logger.warn('This is a warning message');
-    this.logger.error('This is an error message');
+    Logger.log('Getting message from TaskService');
+    Logger.warn('This is a warning message');
+    Logger.error('This is an error message');
     // throw new InternalServerErrorException('This is a test message');
     return this.taskRepository.getMessage();
   }

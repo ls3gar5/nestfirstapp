@@ -16,7 +16,11 @@ export class TaskRepository {
   ) { }
   async getAll(): Promise<Task[]> {
     try {
-      return await this.taskModule.find<Task>();
+      const results = await this.taskModule.find();
+      if (!results) {
+        return [];
+      }
+      return results.map(result => new Task(result));
     } catch (error) {
       throw new InternalServerErrorException(error.message);
     }

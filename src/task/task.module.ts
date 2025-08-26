@@ -22,6 +22,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     MongooseModule.forFeature([{ name: Tasks.name, schema: TaskSchema }]),
   ],
   controllers: [TaskController, TaskV2Controller],
-  providers: [TaskService, TaskRepository],
+  providers: [TaskService, TaskRepository, Logger],
 })
 export class TaskModule { }
