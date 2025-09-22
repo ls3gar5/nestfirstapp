@@ -25,9 +25,9 @@ export class TaskService {
   ];
 
   async getMessage(): Promise<string> {
-    Logger.log('Getting message from TaskService');
-    Logger.warn('This is a warning message');
-    Logger.error('This is an error message');
+    // Logger.log('Getting message from TaskService');
+    // Logger.warn('This is a warning message');
+    // Logger.error('This is an error message');
     // throw new InternalServerErrorException('This is a test message');
     return this.taskRepository.getMessage();
   }
