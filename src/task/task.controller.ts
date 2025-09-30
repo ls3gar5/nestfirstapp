@@ -17,7 +17,7 @@ import { TaskDto } from './entities/task.dto';
 import { Task } from './entities/task.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomNotFoundException } from '../handler/error.handler';
-import { formattedMessage } from './task.util';
+import { formattedMessage } from '../utils/task.util';
 import { TaskResponse } from './entities/task.interface';
 
 @Controller({ path: 'task', version: '1' })

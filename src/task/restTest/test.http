@@ -1,9 +1,9 @@
 ### get its working
-GET http://localhost:3010/v1/task
+GET http://localhost:3005/v1/task
 ### add a new task
-GET http://localhost:3010/v1/task/title/Dragon
+GET http://localhost:3005/v1/task/title/Dragon
 ### add a new task
-POST http://localhost:3010/v1/task
+POST http://localhost:3005/v1/task
 Content-Type: application/json
 
 {

@@ -28,3 +28,11 @@ export const getOrCreateNonce = (res: ResponseWithLocals): string => {
     // return `'nonce-${res.locals.cspNonce}'`;
     return `'nonce-1234'`;
 }
+
+export const provinceCodeDescription = {
+    informaciondeprovincianodisponible: 'Información de provincia no disponible',
+    ciudadautonomadebuenosaires: 'Ciudad de Buenos Aires',
+    buenosaires: 'Buenos Aires',
+    catamarca: 'Catamarca',
+    cordoba: 'Córdoba',
+}

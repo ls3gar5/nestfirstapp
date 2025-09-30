@@ -7,7 +7,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { CustomExceptionFilter, CustomNotFoundException } from './handler/error.handler';
 import { HelmetMiddleware } from '@nest-middlewares/helmet';
 // import { ServerResponse, IncomingMessage } from 'http';
-import { getOrCreateNonce } from './task/task.util';
+import { getOrCreateNonce } from './utils/task.util';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -24,6 +25,8 @@ import { getOrCreateNonce } from './task/task.util';
     }),
     MongooseModule.forRoot(process.env.MONGOURL),
     TaskModule,
+    EventEmitterModule.forRoot({
+    }),
   ],
   providers: [{
     provide: APP_FILTER,
