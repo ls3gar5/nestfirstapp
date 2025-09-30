@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   HttpCode,
   Param,
   ParseUUIDPipe,
@@ -16,16 +17,17 @@ import { TaskDto } from './entities/task.dto';
 import { Task } from './entities/task.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomNotFoundException } from '../handler/error.handler';
-import { formattedMessage } from './task.util';
+import { formattedMessage } from '../utils/task.util';
+import { TaskResponse } from './entities/task.interface';
 
 @Controller({ path: 'task', version: '1' })
 export class TaskController {
   constructor(private readonly taskservice: TaskService) { }
 
   @Get()
-  async message(): Promise<string> {
-    formattedMessage('test');
-    return await this.taskservice.getMessage();
+  async message(): Promise<TaskResponse> {
+    const message = await this.taskservice.getMessage();
+    return { message };
   }
 
   @Get('list')

@@ -4,11 +4,16 @@ import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { isEmpty } from 'lodash';
 import { TaskRepository } from './task.repository';
+import { provinceCodeDescription } from 'src/utils/task.util';
+import { TaskNotifyService } from './task-notify.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class TaskService {
   constructor(
     private readonly taskRepository: TaskRepository,
+    // private readonly taskNotifyService: TaskNotifyService,
+    private readonly eventEmitter: EventEmitter2,
   ) { }
   // this way is when the logger is not a provider.
   // private readonly logger = new Logger(TaskService.name);
@@ -25,10 +30,21 @@ export class TaskService {
   ];
 
   async getMessage(): Promise<string> {
-    Logger.log('Getting message from TaskService');
-    Logger.warn('This is a warning message');
-    Logger.error('This is an error message');
+    // Logger.log('Getting message from TaskService');
+    // Logger.warn('This is a warning message');
+    // Logger.error('This is an error message');
     // throw new InternalServerErrorException('This is a test message');
+    const province = 'Catamarcà  ';
+    const provinceWithOutAccents = province
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+    const provinceWithOutSpaces = provinceWithOutAccents.replace(/ /g, '').trim();
+    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces];
+
+    // await this.taskNotifyService.notifyTask('New Task Created');
+    this.eventEmitter.emit('task.created', 'New Task Created');
+    Logger.log(`The jurisdiction code for ${province} is ${jurisdictionCode}`);
     return this.taskRepository.getMessage();
   }
 

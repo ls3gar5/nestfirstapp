@@ -16,7 +16,6 @@ export class TaskV2Controller {
     example: '2',
   })
   @Get()
-
   async message(): Promise<string> {
     return await this.taskservice.getMessage();
   }

@@ -14,6 +14,7 @@ export class TaskRepository {
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     @InjectModel(Tasks.name) private taskModule: Model<TaskDocument>,
   ) { }
+
   async getAll(): Promise<Task[]> {
     try {
       const results = await this.taskModule.find<Task>();
@@ -25,6 +26,7 @@ export class TaskRepository {
       throw new InternalServerErrorException(error.message);
     }
   }
+
   async getByTitle(title: string): Promise<Task> {
     try {
       // Check if key exists
