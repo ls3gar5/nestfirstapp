@@ -2,11 +2,13 @@ import { Inject, Injectable, InternalServerErrorException, Logger, LoggerService
 import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
-import { isEmpty } from 'lodash';
 import { TaskRepository } from './task.repository';
 import { provinceCodeDescription } from 'src/utils/task.util';
 import { TaskNotifyService } from './task-notify.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { isEmpty } from 'class-validator';
 
 @Injectable()
 export class TaskService {
@@ -14,6 +16,7 @@ export class TaskService {
     private readonly taskRepository: TaskRepository,
     // private readonly taskNotifyService: TaskNotifyService,
     private readonly eventEmitter: EventEmitter2,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) { }
   // this way is when the logger is not a provider.
   // private readonly logger = new Logger(TaskService.name);
@@ -30,10 +33,17 @@ export class TaskService {
   ];
 
   async getMessage(): Promise<string> {
-    // Logger.log('Getting message from TaskService');
-    // Logger.warn('This is a warning message');
-    // Logger.error('This is an error message');
-    // throw new InternalServerErrorException('This is a test message');
+    // Try to get province from cache
+    const cachedProvince: string = await this.cacheManager.get('province');
+    Logger.log(`Cache value for province: ${cachedProvince}`);
+
+    // Check if we have a valid cached value
+    if (!isEmpty(cachedProvince)) {
+      Logger.log('Returning cached province value');
+      return cachedProvince;
+    }
+
+    // If no valid cache, proceed with normal flow
     const province = 'Catamarcà  ';
     const provinceWithOutAccents = province
       .normalize('NFD')
@@ -42,7 +52,9 @@ export class TaskService {
     const provinceWithOutSpaces = provinceWithOutAccents.replace(/ /g, '').trim();
     const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces];
 
-    // await this.taskNotifyService.notifyTask('New Task Created');
+    // Store in cache with TTL of 600 seconds (10 minutes)
+    await this.cacheManager.set('province', 'Argentina');
+
     this.eventEmitter.emit('task.created', 'New Task Created');
     Logger.log(`The jurisdiction code for ${province} is ${jurisdictionCode}`);
     return this.taskRepository.getMessage();

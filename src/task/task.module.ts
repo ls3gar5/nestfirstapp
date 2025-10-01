@@ -10,16 +10,6 @@ import { TaskNotifyService } from './task-notify.service';
 
 @Module({
   imports: [
-    CacheModule.register({
-      isGlobal: true, // Makes CacheModule available everywhere
-      ttl: 600, // seconds
-      max: 1000, // maximum number of items in cache
-    }),
-    CacheModule.register({
-      isGlobal: true, // Makes CacheModule available everywhere
-      ttl: 600, // seconds
-      max: 1000, // maximum number of items in cache
-    }),
     MongooseModule.forFeature([{ name: Tasks.name, schema: TaskSchema }]),
   ],
   controllers: [TaskController, TaskV2Controller],

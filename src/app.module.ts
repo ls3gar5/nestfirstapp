@@ -14,8 +14,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   imports: [
     CacheModule.register({
       isGlobal: true, // Makes CacheModule available everywhere
-      ttl: 60, // seconds    
-      max: 1000, // maximum number of items in cache
+      ttl: 60000, // milliseconds    
+      max: 100, // maximum number of items in cache
       store: 'memory', // default store
       // You can also use other stores like 'redis' or 'ioredis' if configured
     }),
