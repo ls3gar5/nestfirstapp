@@ -3,7 +3,7 @@ import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskRepository } from './task.repository';
-import { provinceCodeDescription } from '../utils/task.util';
+import { provinceCodeDescription } from './utils/task.util';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';

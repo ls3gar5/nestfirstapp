@@ -7,7 +7,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { CustomExceptionFilter, CustomNotFoundException } from './handler/error.handler';
 import { HelmetMiddleware } from '@nest-middlewares/helmet';
 // import { ServerResponse, IncomingMessage } from 'http';
-import { getOrCreateNonce } from './utils/task.util';
+import { getOrCreateNonce } from './task/utils/task.util';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({

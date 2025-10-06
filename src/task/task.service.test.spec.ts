@@ -11,7 +11,7 @@ describe('TaskService - getMessage', () => {
 
     beforeEach(() => {
         jest.resetModules();
-        jest.mock('../utils/task.util', () => ({
+        jest.mock('../task/utils/task.util', () => ({
             provinceCodeDescription: {
                 ciudaddebuenosaires: 'Ciudad de Buenos Aires'
             }
@@ -82,7 +82,7 @@ describe('TaskService - getMessage', () => {
 
     it('should use fallback code if provinceCodeDescription does not contain the key - No Province Code', async () => {
         // const { TaskService } = require('./task.service');
-        jest.mock('../utils/task.util', () => ({
+        jest.mock('../task/utils/task.util', () => ({
             provinceCodeDescription: {}
         }));
 
