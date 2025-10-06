@@ -3,8 +3,7 @@ import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskRepository } from './task.repository';
-import { provinceCodeDescription } from 'src/utils/task.util';
-import { TaskNotifyService } from './task-notify.service';
+import { provinceCodeDescription } from '../utils/task.util';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -50,7 +49,7 @@ export class TaskService {
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
     const provinceWithOutSpaces = provinceWithOutAccents.replace(/ /g, '').trim();
-    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces] ?? 'PEPEEEEE';
+    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces] ?? 'No Province Code';
 
     // Store in cache with TTL of 600 seconds (10 minutes)
     await this.cacheManager.set('province', jurisdictionCode);

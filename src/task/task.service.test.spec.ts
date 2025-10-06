@@ -2,13 +2,6 @@ import { TaskService } from './task.service';
 import { TaskRepository } from './task.repository';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager';
-import { provinceCodeDescription } from 'src/utils/task.util';
-
-jest.mock('src/utils/task.util', () => ({
-    provinceCodeDescription: {
-        ciudadebuenosaires: 'CABA-CODE'
-    }
-}));
 
 describe('TaskService - getMessage', () => {
     let taskService: TaskService;
@@ -17,8 +10,15 @@ describe('TaskService - getMessage', () => {
     let cacheManager: jest.Mocked<Cache>;
 
     beforeEach(() => {
+        jest.resetModules();
+        jest.mock('../utils/task.util', () => ({
+            provinceCodeDescription: {
+                ciudaddebuenosaires: 'Ciudad de Buenos Aires'
+            }
+        }));
+
         taskRepository = {
-            getMessage: jest.fn().mockResolvedValue('Repository Message'),
+            getMessage: jest.fn(),
             // other methods can be mocked as needed
         } as unknown as jest.Mocked<TaskRepository>;
 
@@ -47,25 +47,50 @@ describe('TaskService - getMessage', () => {
         expect(eventEmitter.emit).not.toHaveBeenCalled();
     });
 
-    it('should compute, cache, emit event, and return repository message if no cache', async () => {
-        cacheManager.get.mockResolvedValueOnce(undefined);
-        taskRepository.getMessage.mockReturnValueOnce('Repository Message');
+    it('should compute, return from cache Ciudad de Buenos Aires', async () => {
+
+        cacheManager.get.mockResolvedValueOnce('Ciudad de Buenos Aires');
+        taskRepository.getMessage.mockReturnValueOnce('Ciudad de Buenos Aires');
         const result = await taskService.getMessage();
 
         expect(cacheManager.get).toHaveBeenCalledWith('province');
-        expect(cacheManager.set).toHaveBeenCalledWith('province', 'CABA-CODE');
-        expect(eventEmitter.emit).toHaveBeenCalledWith('task.created', 'New Task Created');
-        expect(result).toBe('Repository Message');
+        expect(result).toBe('Ciudad de Buenos Aires');
+        expect(cacheManager.set).not.toHaveBeenCalled();
+        expect(eventEmitter.emit).not.toHaveBeenCalled();
     });
 
-    it('should use fallback code if provinceCodeDescription does not contain the key', async () => {
-        // Remove the key to simulate fallback
-        // provinceCodeDescription.ciudaddebuenosaires = undefined;
+    it('should return from array Ciudad de Buenos Aires', async () => {
+
         cacheManager.get.mockResolvedValueOnce(undefined);
-        taskRepository.getMessage.mockReturnValueOnce('Repository Message');
+        taskRepository.getMessage.mockReturnValueOnce('Ciudad de Buenos Aires');
         const result = await taskService.getMessage();
 
-        expect(cacheManager.set).toHaveBeenCalledWith('province', 'PEPEEEEE');
-        expect(result).toBe('Repository Message');
+        expect(cacheManager.get).toHaveBeenCalledWith('province');
+        expect(result).toBe('Ciudad de Buenos Aires');
+    });
+
+    it('should compute, cache, emit event, and return repository message if no cache', async () => {
+        cacheManager.get.mockResolvedValueOnce(null);
+        taskRepository.getMessage.mockReturnValueOnce('Ciudad de Buenos Aires');
+        const result = await taskService.getMessage();
+
+        expect(cacheManager.get).toHaveBeenCalledWith('province');
+        expect(cacheManager.set).toHaveBeenCalledWith('province', 'Ciudad de Buenos Aires');
+        expect(eventEmitter.emit).toHaveBeenCalledWith('task.created', 'New Task Created');
+        expect(result).toBe('Ciudad de Buenos Aires');
+    });
+
+    it('should use fallback code if provinceCodeDescription does not contain the key - No Province Code', async () => {
+        // const { TaskService } = require('./task.service');
+        jest.mock('../utils/task.util', () => ({
+            provinceCodeDescription: {}
+        }));
+
+        cacheManager.get.mockResolvedValueOnce(undefined);
+        taskRepository.getMessage.mockReturnValueOnce('Ciudad de Buenos Aires');
+        const result = await taskService.getMessage();
+
+        expect(cacheManager.set).toHaveBeenCalledWith('province', 'Ciudad de Buenos Aires');
+        expect(result).toBe('Ciudad de Buenos Aires');
     });
 });
