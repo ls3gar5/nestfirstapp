@@ -44,16 +44,16 @@ export class TaskService {
     }
 
     // If no valid cache, proceed with normal flow
-    const province = 'Catamarcà  ';
+    const province = 'Ciudad de Buenos Aires';
     const provinceWithOutAccents = province
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
     const provinceWithOutSpaces = provinceWithOutAccents.replace(/ /g, '').trim();
-    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces];
+    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces] ?? 'PEPEEEEE';
 
     // Store in cache with TTL of 600 seconds (10 minutes)
-    await this.cacheManager.set('province', 'Argentina');
+    await this.cacheManager.set('province', jurisdictionCode);
 
     this.eventEmitter.emit('task.created', 'New Task Created');
     Logger.log(`The jurisdiction code for ${province} is ${jurisdictionCode}`);
