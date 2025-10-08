@@ -11,3 +11,12 @@ Content-Type: application/json
   "description": "This is a test task",
   "status": "PENDING"
 }
+### add a new task by async way
+POST http://localhost:3005/v1/task/store
+Content-Type: application/json
+
+{
+  "title": "test",
+  "description": "Store This is a test task",
+  "status": "PENDING"
+}

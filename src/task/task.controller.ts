@@ -5,6 +5,7 @@ import {
   Get,
   Header,
   HttpCode,
+  Logger,
   Param,
   ParseUUIDPipe,
   Patch,
@@ -18,10 +19,14 @@ import { Task } from './entities/task.entity';
 import { ApiTags } from '@nestjs/swagger';
 import { CustomNotFoundException } from '../handler/error.handler';
 import { TaskResponse } from './entities/task.interface';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { taskNotifyService } from './constant/task.contant';
 
 @Controller({ path: 'task', version: '1' })
 export class TaskController {
-  constructor(private readonly taskservice: TaskService) { }
+  constructor(private readonly taskservice: TaskService,
+    private readonly eventEmitter: EventEmitter2,
+  ) { }
 
   @Get()
   async message(): Promise<TaskResponse> {
@@ -48,6 +53,14 @@ export class TaskController {
   async create(@Body() newtask: TaskDto): Promise<Task> {
     return await this.taskservice.create(newtask);
   }
+
+  @Post('store')
+  @HttpCode(201)
+  async createAsyc(@Body() newtask: TaskDto): Promise<void> {
+    this.eventEmitter.emit(taskNotifyService.TASK_STORE_SERVICE, newtask);
+    Logger.log(`The jurisdiction code`);
+  }
+
 
   @Patch(':id')
   @HttpCode(202)

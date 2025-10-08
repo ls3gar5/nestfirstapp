@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException, Logger, LoggerService, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,7 +7,7 @@ import { provinceCodeDescription } from './utils/task.util';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { isEmpty } from 'class-validator';
+import { isEmpty, validate } from 'class-validator';
 
 @Injectable()
 export class TaskService {
@@ -72,6 +72,8 @@ export class TaskService {
   }
 
   async create(taskDto: TaskDto): Promise<Task> {
+    const isTaskDtoValid = validate(taskDto);
+    if (isEmpty(isTaskDtoValid)) throw new NotFoundException('Task data is not valid');
     const task = new Task({
       id: uuidv4(),
       title: taskDto.title,
