@@ -10,14 +10,14 @@ export class TaskNotifyService {
     constructor(private readonly taskService: TaskService) { }
 
     @OnEvent(taskNotifyService.TASK_CREATED_SERVICE)
-    async notifyTask(taskTitle: string) {
+    async handleNotifyTask(taskTitle: string) {
         console.log('Event received at:', new Date().toISOString());
         await new Promise(resolve => setTimeout(resolve, 5000));
         console.log(`Task created: ${taskTitle}`, new Date().toISOString());
     }
 
     @OnEvent(taskNotifyService.TASK_STORE_SERVICE)
-    async storedTask(task: TaskDto) {
+    async handleStoredTask(task: TaskDto) {
         console.log('Event task.stored received at:', new Date().toISOString());
         await new Promise(resolve => setTimeout(resolve, 5000));
         try {

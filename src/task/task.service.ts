@@ -68,6 +68,7 @@ export class TaskService {
   }
 
   async getAll(): Promise<Task[]> {
+    console.log('Fetching all tasks from repository');
     return await this.taskRepository.getAll();
   }
 

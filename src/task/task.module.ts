@@ -5,8 +5,7 @@ import { TaskRepository } from './task.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Tasks, TaskSchema } from './schema/task.schema';
 import { TaskV2Controller } from './task.v2.controller';
-import { CacheModule } from '@nestjs/cache-manager';
-import { TaskNotifyService } from './task-notify.service';
+import { TaskNotifyService } from './task.notify.service';
 
 @Module({
   imports: [
