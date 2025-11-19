@@ -1,4 +1,11 @@
-import { Inject, Injectable, InternalServerErrorException, Logger, LoggerService, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  LoggerService,
+  NotFoundException,
+} from '@nestjs/common';
 import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -35,11 +42,23 @@ export class TaskService {
     // Logger.error('This is an error message');
     // throw new InternalServerErrorException('This is a test message');
     const province = 'Catamarcà  ';
+    const orderSessionId = '@';
+    // const match = sessionId.match(/[a-zA-Z0-9]+/);
+    // if (!match && match.length === 0) {
+    //   throw new InternalServerErrorException('Session ID is invalid');
+    // }
+    const match = orderSessionId.match(/[a-zA-Z0-9]+/);
+    const sessionId = match ? match[0] : '';
+    if (isEmpty(sessionId)) {
+      throw new Error('Invalid orderSessionId format');
+    }
     const provinceWithOutAccents = province
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
-    const provinceWithOutSpaces = provinceWithOutAccents.replace(/ /g, '').trim();
+    const provinceWithOutSpaces = provinceWithOutAccents
+      .replace(/ /g, '')
+      .trim();
     const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces];
 
     // await this.taskNotifyService.notifyTask('New Task Created');
