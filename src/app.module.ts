@@ -9,6 +9,7 @@ import { HelmetMiddleware } from '@nest-middlewares/helmet';
 // import { ServerResponse, IncomingMessage } from 'http';
 import { getOrCreateNonce } from './task/utils/task.util';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { DeviceController } from './device/device.controller';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     provide: APP_FILTER,
     useClass: CustomNotFoundException,
   },],
+  controllers: [DeviceController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -55,7 +57,4 @@ export class AppModule implements NestModule {
   }
 
 }
-// function getOrCreateNonce(res: ServerResponse<IncomingMessage>): string {
-//   throw new Error('Function not implemented.');
-// }
 
