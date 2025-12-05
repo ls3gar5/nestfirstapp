@@ -8,6 +8,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { isEmpty, validate } from 'class-validator';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class TaskService {
@@ -16,6 +18,7 @@ export class TaskService {
     // private readonly taskNotifyService: TaskNotifyService,
     private readonly eventEmitter: EventEmitter2,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    @InjectQueue('audio') private audioQueue: Queue
   ) { }
   // this way is when the logger is not a provider.
   // private readonly logger = new Logger(TaskService.name);
@@ -35,6 +38,7 @@ export class TaskService {
     // Try to get province from cache
     const cachedProvince: string = await this.cacheManager.get('province');
     Logger.log(`Cache value for province: ${cachedProvince}`);
+    await this.audioQueue.add('transcode', { video: 'http://example.com/video.mp4' }, { delay: 5000 });
 
     // Check if we have a valid cached value
     if (!isEmpty(cachedProvince)) {

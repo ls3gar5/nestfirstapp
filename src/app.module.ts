@@ -10,6 +10,9 @@ import { HelmetMiddleware } from '@nest-middlewares/helmet';
 import { getOrCreateNonce } from './task/utils/task.util';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { DeviceController } from './device/device.controller';
+import { BullModule } from '@nestjs/bullmq';
+import { AudioProcessor } from './procesor/audio.procesor';
+import { Tasks, TaskSchema } from './task/schema/task.schema';
 
 @Module({
   imports: [
@@ -25,9 +28,24 @@ import { DeviceController } from './device/device.controller';
       envFilePath: '.env',
     }),
     MongooseModule.forRoot(process.env.MONGOURL),
-    TaskModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'audio',
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: {
+          count: 3,
+        },
+      }
+    }),
     EventEmitterModule.forRoot({
     }),
+    TaskModule,
   ],
   providers: [{
     provide: APP_FILTER,
@@ -35,7 +53,7 @@ import { DeviceController } from './device/device.controller';
   }, {
     provide: APP_FILTER,
     useClass: CustomNotFoundException,
-  },],
+  }],
   controllers: [DeviceController],
 })
 export class AppModule implements NestModule {
