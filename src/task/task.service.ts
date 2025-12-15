@@ -1,4 +1,11 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  LoggerService,
+  NotFoundException,
+} from '@nestjs/common';
 import { Task, TaskStatus } from './entities/task.entity';
 import { TaskDto } from './entities/task.dto';
 import { v4 as uuidv4 } from 'uuid';
@@ -35,6 +42,11 @@ export class TaskService {
   ];
 
   async getMessage(): Promise<string> {
+    // Logger.log('Getting message from TaskService');
+    // Logger.warn('This is a warning message');
+    // Logger.error('This is an error message');
+    // throw new InternalServerErrorException('This is a test message');
+
     // Try to get province from cache
     const cachedProvince: string = await this.cacheManager.get('province');
     Logger.log(`Cache value for province: ${cachedProvince}`);
@@ -45,18 +57,14 @@ export class TaskService {
       Logger.log('Returning cached province value');
       return cachedProvince;
     }
+    const province = 'Catamarcà  ';
 
-    // If no valid cache, proceed with normal flow
-    const province = 'Ciudad de Buenos Aires';
     const provinceWithOutAccents = province
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase();
     const provinceWithOutSpaces = provinceWithOutAccents.replace(/ /g, '').trim();
-    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces] ?? 'No Province Code';
-
-    // Store in cache with TTL of 600 seconds (10 minutes)
-    await this.cacheManager.set('province', jurisdictionCode);
+    const jurisdictionCode = provinceCodeDescription[provinceWithOutSpaces];
 
     this.eventEmitter.emit('task.created', 'New Task Created');
     Logger.log(`The jurisdiction code for ${province} is ${jurisdictionCode}`);
