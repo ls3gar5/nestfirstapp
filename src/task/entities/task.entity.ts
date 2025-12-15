@@ -1,11 +1,11 @@
 import {
+  isEmpty,
   IsIn,
   IsNotEmpty,
   IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
-import { isEmpty } from 'lodash';
 import { TaskDto } from './task.dto';
 
 export enum TaskStatus {

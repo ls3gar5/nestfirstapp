@@ -32,6 +32,7 @@ export const getOrCreateNonce = (res: ResponseWithLocals): string => {
 export const provinceCodeDescription = {
     informaciondeprovincianodisponible: 'Información de provincia no disponible',
     ciudadautonomadebuenosaires: 'Ciudad de Buenos Aires',
+    ciudaddebuenosaires: 'Ciudad de Buenos Aires',
     buenosaires: 'Buenos Aires',
     catamarca: 'Catamarca',
     cordoba: 'Córdoba',

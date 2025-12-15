@@ -5,24 +5,24 @@ import { TaskRepository } from './task.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Tasks, TaskSchema } from './schema/task.schema';
 import { TaskV2Controller } from './task.v2.controller';
-import { CacheModule } from '@nestjs/cache-manager';
-import { TaskNotifyService } from './task-notify.service';
+import { TaskNotifyService } from './task.notify.service';
+import { AudioProcessor } from 'src/procesor/audio.procesor';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
-    CacheModule.register({
-      isGlobal: true, // Makes CacheModule available everywhere
-      ttl: 600, // seconds
-      max: 1000, // maximum number of items in cache
-    }),
-    CacheModule.register({
-      isGlobal: true, // Makes CacheModule available everywhere
-      ttl: 600, // seconds
-      max: 1000, // maximum number of items in cache
-    }),
     MongooseModule.forFeature([{ name: Tasks.name, schema: TaskSchema }]),
+    BullModule.registerQueue({
+      name: 'audio',
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: {
+          count: 3,
+        },
+      }
+    }),
   ],
   controllers: [TaskController, TaskV2Controller],
-  providers: [TaskService, TaskRepository, Logger, TaskNotifyService],
+  providers: [TaskService, TaskRepository, Logger, TaskNotifyService, AudioProcessor],
 })
 export class TaskModule { }

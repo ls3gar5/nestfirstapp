@@ -12,7 +12,7 @@ export class CustomNotFoundException implements ExceptionFilter {
 
         response.status(status).json({
             statusCode: status,
-            message: 'Resource not found',
+            message: `Resource not found: ${message.message || 'Not Found'}`,
         });
     }
 }

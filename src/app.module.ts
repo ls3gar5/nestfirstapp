@@ -7,15 +7,19 @@ import { APP_FILTER } from '@nestjs/core';
 import { CustomExceptionFilter, CustomNotFoundException } from './handler/error.handler';
 import { HelmetMiddleware } from '@nest-middlewares/helmet';
 // import { ServerResponse, IncomingMessage } from 'http';
-import { getOrCreateNonce } from './utils/task.util';
+import { getOrCreateNonce } from './task/utils/task.util';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { DeviceController } from './device/device.controller';
+import { BullModule } from '@nestjs/bullmq';
+import { AudioProcessor } from './procesor/audio.procesor';
+import { Tasks, TaskSchema } from './task/schema/task.schema';
 
 @Module({
   imports: [
     CacheModule.register({
       isGlobal: true, // Makes CacheModule available everywhere
-      ttl: 60, // seconds    
-      max: 1000, // maximum number of items in cache
+      ttl: 60000, // milliseconds    
+      max: 100, // maximum number of items in cache
       store: 'memory', // default store
       // You can also use other stores like 'redis' or 'ioredis' if configured
     }),
@@ -24,9 +28,24 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       envFilePath: '.env',
     }),
     MongooseModule.forRoot(process.env.MONGOURL),
-    TaskModule,
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'audio',
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: {
+          count: 3,
+        },
+      }
+    }),
     EventEmitterModule.forRoot({
     }),
+    TaskModule,
   ],
   providers: [{
     provide: APP_FILTER,
@@ -34,7 +53,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   }, {
     provide: APP_FILTER,
     useClass: CustomNotFoundException,
-  },],
+  }],
+  controllers: [DeviceController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
@@ -55,7 +75,4 @@ export class AppModule implements NestModule {
   }
 
 }
-// function getOrCreateNonce(res: ServerResponse<IncomingMessage>): string {
-//   throw new Error('Function not implemented.');
-// }
 
